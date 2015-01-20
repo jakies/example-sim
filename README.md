@@ -1,35 +1,27 @@
-example-sim
-===========
+SELIG_PhET_Intern
+=====
 
-Example demonstrating the structure of a simulation repository,
-basic architecture of a PhET simulation, formatting conventions, and code documentation.
+## <a name="BarMagnet-randomizePos"></a> BarMagnet#randomizePos([width, height, withRotate])
+Randomly sets `BarMagnet.location` to be within `\u00B1width/2` and `\u00B1height/2`.
+Additionally, `if (withRotate == true)`, randomly sets `BarMagnet.orientation`.
 
-By PhET Interactive Simulations
-http://phet.colorado.edu/
+=====
 
-NOTE: This repository has dependencies on other repositories. Those repositories
-much be checked out as siblings to this repository in your directory structure.
-See package.json for a list of dependencies.  Here is a list of clone commands
-you can run to check out this example sim and all of its dependencies:
-```
-git clone https://github.com/phetsims/example-sim.git
-git clone https://github.com/phetsims/assert.git
-git clone https://github.com/phetsims/axon.git
-git clone https://github.com/phetsims/brand.git
-git clone https://github.com/phetsims/chipper.git
-git clone https://github.com/phetsims/dot.git
-git clone https://github.com/phetsims/joist.git
-git clone https://github.com/phetsims/kite.git
-git clone https://github.com/phetsims/phet-core.git
-git clone https://github.com/phetsims/phetcommon.git
-git clone https://github.com/phetsims/scenery.git
-git clone https://github.com/phetsims/scenery-phet.git
-git clone https://github.com/phetsims/sun.git
-git clone https://github.com/phetsims/sherpa.git
-```
+### Addressed in review:
+> <a name="comment-dupeConst"></a> Duplicated constants
+PhET simulations seem to work with these static bounds, and then are scaled by the view appropriately. I added optional parameters so that when I understand how to reference the `ExampleScreenView` dimensions from the `ControlPanel` view in the correct way, I can go back and pass them in instead of deferring to literals.
 
-Third-Party Dependencies
-=============
+> Debug statements left in code
+Heh... oops!
 
-This repository uses third-party libraries.
-Those libraries and their licenses are available in: https://github.com/phetsims/sherpa.
+> MVC callchain antipattern
+[randomizePos](#BarMagnet-randomizePos) is a method that should belong to the `BarModel` instance, and now it does appropriately. This method is called from the `ControlPanelt` view, which is passed a reference to the model.
+
+> Unmaintainable parent node access
+Expanding on my explanation for "[duplicated constraints](#comment-dupeConst)", I know that the correct way to define the bounds for [randomizePos](#BarMagnet-randomizePos) is to access them from root-parent `ExampleScreenView`.
+
+> Moving a magnet can occasionally change bar size
+This is associated with part 2.
+
+> Modularizing commits
+I will address each button with actions for one commit.

@@ -1,4 +1,5 @@
 {
   "example-sim.name": "Example Simulation",
-  "flipPolarity": "Flip Polarity"
+  "flipPolarity": "Flip Polarity",
+  "moveBar": "Move bar magnet"
 }

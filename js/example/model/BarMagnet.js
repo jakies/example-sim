@@ -27,5 +27,24 @@ define( function( require ) {
     this.size = size;
   }
 
-  return inherit( PropertySet, BarMagnet );
+  return inherit( PropertySet, BarMagnet, {
+    
+    // Randomize bar position and rotation
+    randomizePos: function(width, height, withRotate) {
+      var numOrDefault = function(val, dflt) {
+        return (typeof val === 'number' && isFinite(val) ? val : dflt);
+      }
+      width = numOrDefault(width, 768);   // I'm sorry I just can't find a nice
+      height = numOrDefault(height, 504); // reference to these defined elsewhere :(
+      
+      if (withRotate) {
+        this.orientation = Math.random() * Math.PI *2;
+      }
+      this.location = this.location.copy().setXY(
+        (Math.random() * width) - (width / 2),
+        (Math.random() * height) - (height / 2)
+      );
+    }
+    
+	});
 } );
