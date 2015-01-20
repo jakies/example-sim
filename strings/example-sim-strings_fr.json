@@ -1,5 +1,6 @@
 {
   "example-sim.name": "Simulation par Exemple",
   "flipPolarity": "Polarit\u00E9 Intervt",
-  "moveBar": "D\u00E9placer la barre"
+  "moveBar": "D\u00E9placer la barre",
+  "addBar": "Ajouter un aimant"
 }

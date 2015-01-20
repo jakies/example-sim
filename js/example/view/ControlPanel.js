@@ -20,6 +20,7 @@ define( function( require ) {
   // strings
   var flipPolarityString = require( 'string!EXAMPLE_SIM/flipPolarity' );
   var moveBarString = require( 'string!EXAMPLE_SIM/moveBar' );
+  var addBarString = require( 'string!EXAMPLE_SIM/addBar' );
 
   /**
    * Control panel constructor
@@ -57,12 +58,22 @@ define( function( require ) {
         model.barMagnet.randomizePos(null, null, true);
       }
     });
+    
+    // 'Add bar magnet' button
+    var addBarButton = new TextPushButton( addBarString, {
+      font: new PhetFont( 16 ),
+      baseColor: 'teal',
+      xMargin: 10,
+      listener: function() {
+        model.addBar();
+      }
+    });
 
     // 'Reset All' button, resets the sim to its initial state
     var resetAllButton = new ResetAllButton( { listener: function() { model.reset(); } } );
 
     // The contents of the control panel
-    var content = new VBox( { align: 'center', spacing: 10, children: [ flipButton, moveBarButton, resetAllButton ] } );
+    var content = new VBox( { align: 'center', spacing: 10, children: [ flipButton, moveBarButton, addBarButton, resetAllButton ] } );
 
     Panel.call( this, content, options );
   }

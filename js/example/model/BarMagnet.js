@@ -44,6 +44,8 @@ define( function( require ) {
         (Math.random() * width) - (width / 2),
         (Math.random() * height) - (height / 2)
       );
+      
+      return this; // chaining
     }
     
 	});
