@@ -31,17 +31,22 @@ define( function( require ) {
     // model-view transform
     var modelViewTransform = ModelViewTransform2.createOffsetScaleMapping( new Vector2( exampleScreenView.layoutBounds.width / 2, exampleScreenView.layoutBounds.height / 2 ), 1 );
     
-    exampleScreenView.addChild( new BarMagnetNode( model.barMagnet, modelViewTransform ) );
-    exampleScreenView.addChild( new ControlPanel( model, { x: 50, y: 50 } ) );
+    // default elements
+    var defaultElements = [
+      new BarMagnetNode( model.barMagnet, modelViewTransform ),
+      new ControlPanel( model, { x: 50, y: 50 } )
+    ]
+    
+    exampleScreenView.setChildren( defaultElements );
 
     // Add the last bar prepended to model.extraBars
-    model.events.on("addBar", function() {
-      exampleScreenView.insertChild( 0, new BarMagnetNode(model.extraBars[0], modelViewTransform) );
+    model.events.on("addBar", function( bar ) {
+      exampleScreenView.insertChild( 0, new BarMagnetNode(bar, modelViewTransform) );
     });
     
-    // Remove all elements added after the first two (original magnet and control panel)
-    model.events.on("removeExtraBars", function() {
-      exampleScreenView.children = exampleScreenView.children.slice(-2);
+    // Reset view children to defaultElements
+    model.events.on("resetViewChildren", function() {
+      exampleScreenView.setChildren( defaultElements );
     });
   }
 

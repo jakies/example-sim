@@ -30,7 +30,6 @@ define( function( require ) {
     // model elements
     this.barMagnet = this.barFactory();
     this.events = new Events();
-    this.extraBars = [];
   }
 
   return inherit( Object, ExampleModel, {
@@ -38,13 +37,12 @@ define( function( require ) {
     // Resets all model elements
     reset: function() {
       this.barMagnet.reset();
-      this.events.trigger( "removeExtraBars" );
+      this.events.trigger( "resetViewChildren" );
     },
     
-    // Add bar by dispatching addBar event to ExampleScreenView
+    // Add bar by dispatching addBar event to ExampleScreenView with bar arg
     addBar: function() {
-      this.extraBars.unshift( this.barFactory().randomizePos(null, null, true) );
-      this.events.trigger( "addBar" );
+      this.events.trigger1( "addBar", this.barFactory().randomizePos(null, null, true) );
     },
 
     // Called by the animation loop. Optional, so if your model has no animation, you can omit this.

@@ -1,6 +1,14 @@
 SELIG_PhET_Intern
 =====
 ### Addressed in review:
+> Memory leak in model array
+
+Since the `ExampleModel` doesn't *need* to retain references to the additional `BarMagnet`s, I removed `ExampleModel.extraBars` and changed the `ExampleModel.events["addBar"]` to be called with `ExampleModel.events.trigger1( "addBar", BarMagnet )` so that the model travels with the event. When the lone reference to a `BarMagnetNode` is released from `ExampleScreenView.children`, the corresponding `BarMagnet` is garbage-collected with it.
+
+> `unshift + elements[0]` and `slice(-2)` calls unmaintainable
+
+The unshift and explicit element position access were resolved by removing the `ExampleModel.extraBars` array and passing the new `BarMagnet` with the `"addBar"` event explicitly. The `ExampleModelView.children = ExampleModelView.children.slice(-2)` issue was resolved by defining an array called `defaultElements` in the `ExampleModelView` constructor (though it is not tied to the instance so it isn't available after instantiation) which is used in the call `ExampleModelView.setChildren( defaultElements )` during construction and the `"resetViewChildren"` event callback.
+
 > <a name="comment-dupeConst"></a> Duplicated constants
 
 PhET simulations seem to work with these static bounds, and then are scaled by the view appropriately. I added optional parameters so that when I understand how to reference the `ExampleScreenView` dimensions from the `ControlPanel` view in the correct way, I can go back and pass them in instead of deferring to literals.
@@ -30,9 +38,6 @@ I will address each button with actions for one commit.
 ### <a name="ExampleModel-events"></a> ExampleModel.events
 Events for the `ExampleModel` instance.
 
-### <a name="ExampleModel-extraBars"></a> ExampleModel.extraBars
-An array that contains bars created with `ExampleModel.addBar()`. New bars are **prepended** to the array.
-
 ### <a name="ExampleModel-barFactory"></a> ExampleModel#barFactory()
 Creates a default `BarMagnet` positioned at the center of the screen with `width: 262.5` and `height: 52.5`.
 
@@ -44,8 +49,8 @@ Randomly sets `BarMagnet.location` to be within `\u00B1width/2` and `\u00B1heigh
 
 =====
 # New Events
-### ExampleModel.events["addBar"]
-- `ExampleScreenView` : constructs a new `BarMagnetNode` with the first (latest addition) element in `ExampleModel.extraBars` and prepends it to `ExampleScreenView.children`
+### ExampleModel.events["addBar"], callback( bar )
+- `ExampleScreenView` : constructs a new `BarMagnetNode` with the `BarMagnet` argument `bar` and calls `ExampleScreenView.insertChild(0, BarMagnetNode)`.
 
-### ExampleModel.events["removeExtraBars"]
-- `ExampleScreenView` : clears all elements in `ExampleScreenView.children` except for the last 2, which are the original `BarMagnetNode` and the `ControlPanel`
+### ExampleModel.events["resetViewChildren"], callback()
+- `ExampleScreenView` : calls `ExampleScreenView.setChildren( defaultElements )` where `defaultElements` is defined in the `ExampleScreenView` constructor.
